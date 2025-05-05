@@ -6,114 +6,452 @@
     <title>Page d'accueil</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Raleway:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Raleway', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+      body {
+        font-family: 'Raleway', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      
+      header {
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+      
+      /* Section des boutons d'inscription et de connexion */
+      .auth-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      
+      .auth-buttons button {
+        padding: 0.5rem 1rem;
+        border: none;
+        background-color: #289136;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        border-radius: 5px;
+      }
+      
+      .auth-buttons button:hover {
+        background-color: #1b5a0e;
+      }
+      
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+        position: relative;
+      }
+      
+      /* Menu */
+      nav {
+        margin-top: 1rem;
+        width: 100%;
+      }
+      
+      nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: flex-end;
+        padding: 0;
+        margin: 0;
+      }
+      
+      nav ul li {
+        margin: 0 1rem;
+      }
+      
+      nav ul li a {
+        text-decoration: none;
+        color: #555;
+        font-weight: bold;
+        transition: color 0.3s;
+      }
+      
+      nav ul li a:hover {
+        color: #1b5a0e;
+      }
+      
+      /* Tattoo Text */
+      .tattoo-text {
+        font-family: 'Pacifico', cursive;
+        font-size: 64px;
+        color: rgb(0, 0, 0);
+        position: relative;
+        display: flex;
+      }
+      
+      .letter {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeIn 0.5s forwards;
+      }
+      
+      @keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
         }
-
-        header {
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 1rem 2rem;
-            position: sticky;
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+      }
+      
+      @keyframes splash {
+        0% {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+      }
+      
+      /* Canvas Container */
+      #canvas_container_div {
+        position: absolute;
+        top: 80%;  /* Position par défaut */
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(180deg);
+        transition: top 0.3s ease-in-out; /* Smooth transition */
+        z-index: 0; /* Le canvas est en dessous */
+      }
+      
+      #canvas {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+      }
+      
+      /* Responsive Design pour petits écrans */
+      @media (max-width: 768px) {
+        #canvas_container_div {
+          top: 50%;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        #canvas_container_div {
+          top: 25%;
+        }
+      }
+      
+      /* Assure que le header et les éléments dessus soient au-dessus du canvas */
+      header,
+      .tattoo-text,
+      .auth-buttons,
+      nav {
+        position: relative;
+        z-index: 10; /* Plus haut que canvas */
+      }
+      
+      
+      /* Plantes animées */
+      .plants {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: plantAnimation 10s infinite linear;
+        z-index: -1; /* Empêche l'animation de chevaucher les autres éléments */
+      }
+      
+      h1 {
+        font-size: 50px;
+        font-family: Pacifico;
+        text-align: center;
+      }
+      
+      p {
+        font-size: 14px;
+        text-align: center;
+      }
+      
+      @keyframes plantAnimation {
+        0% {
             top: 0;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
+            transform: translateX(-50%) scale(1);
+        }
+        50% {
+            top: 20px;
+            transform: translateX(-50%) scale(1.2);
+        }
+        100% {
+            top: 0;
+            transform: translateX(-50%) scale(1);
+        }
+      }
+      
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        /* Plantes animées */
+        .plants {
+            animation: plantAnimationSmallScreen 10s infinite linear; /* Utilise une animation différente pour petits écrans */
+        }
+      
+        /* Réduction de l'animation pour les petits écrans */
+        @keyframes plantAnimationSmallScreen {
+            0% {
+                top: 0;
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                top: 10px; /* Moins de mouvement vertical */
+                transform: translateX(-50%) scale(1.1); /* Un peu moins de zoom */
+            }
+            100% {
+                top: 0;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+      
+        /* Images deviennent responsives */
+        .center-images img {
+            width: 100%; /* Les images prennent toute la largeur */
+            height: auto; /* Hauteur ajustée */
+        }
+      
+        /* Auth buttons */
+        .auth-buttons {
+            flex-direction: column; /* Les boutons sont empilés sur les petits écrans */
             align-items: center;
         }
-
-        nav {
-            margin-top: 1rem;
-            width: 100%;
-        }
-
+      
         nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: flex-end;
-            padding: 0;
-            margin: 0;
-        }
-
-        nav ul li {
-            margin: 0 1rem;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: #555;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: #1b5a0e;
-        }
-
-        /* Pour la mise en page des articles et des commentaires */
-        #posts {
-            margin: 2rem;
-        }
-
-        .post {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .comments {
-            margin-top: 1rem;
-        }
-
-        form {
-            margin-top: 1rem;
-        }
-
-        input[type="text"], textarea {
+            flex-direction: column; /* Menu vertical sur les petits écrans */
+            align-items: center;
             width: 100%;
-            padding: 0.5rem;
-            margin: 0.5rem 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
         }
+      
+        nav ul li {
+            margin: 0.5rem 0; /* Espace entre les éléments du menu */
+        }
+      
+        /* Header Padding et Alignement */
+        header {
+            padding: 1rem; /* Moins de padding */
+        }
+      
+        /* Tattoo Text */
+        .tattoo-text {
+            font-size: 40px; /* Réduction de la taille du texte pour les petits écrans */
+        }
+      
+        /* Titre et Texte */
+        h1 {
+            font-size: 50px;
+            font-family: Pacifico;
+            text-align: center;
+        }
+      
+        p {
+            font-size: 14px;
+            text-align: center;
+        }
+      }
+      
+      /* Pour les très petits écrans */
+      @media (max-width: 480px) {
+        .tattoo-text {
+            font-size: 32px; /* Plus petit */
+        }
+      
+        h1 {
+            font-size: 40px;
+        }
+      
+        p {
+            font-size: 12px;
+        }
+      
+        .auth-buttons button {
+            padding: 0.5rem; /* Boutons plus petits */
+        }
+      }
+      
+      .center-images {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px; /* espace entre les images */
+        margin: 2rem auto;
+        flex-wrap: wrap; /* pour que ça passe bien sur petits écrans */
+      }
+      
+      .center-images img {
+        height: 300px; /* fixe la hauteur */
+        object-fit: cover; /* remplit sans déformer */
+        border-radius: 10px; /* optionnel, coins arrondis */
+        flex: 1 1 30%; /* prend 30% de l'espace mais peut s'adapter */
+        max-width: 100%;
+      }
 
-        button {
-            padding: 0.5rem 1rem;
-            background-color: #289136;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            border-radius: 5px;
-        }
+      .container {
+        max-width: 800px;
+        margin: 50px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
 
-        button:hover {
-            background-color: #1b5a0e;
-        }
+    .post-title {
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+
+    .post-date {
+        color: gray;
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+
+    .post-image {
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .post-content {
+        font-size: 1.1em;
+        line-height: 1.6;
+    }
+
+    .comments-section {
+        margin-top: 40px;
+    }
+
+    .comments-section h3 {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 5px;
+    }
+
+    .comment {
+        margin-top: 10px;
+        border-left: 3px solid #ddd;
+        padding-left: 10px;
+        font-size: 0.95em;
+        color: #333;
+    }
     </style>
+
+    <!-- Firebase App -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDgEriwJhPs3pU_XuDgsnQE7ptFC2iVksI",
+  authDomain: "blogfleurdepau2.firebaseapp.com",
+  databaseURL: "https://blogfleurdepau2-default-rtdb.firebaseio.com",
+  projectId: "blogfleurdepau2",
+  storageBucket: "blogfleurdepau2.firebasestorage.app",
+  messagingSenderId: "223860914702",
+  appId: "1:223860914702:web:9766ab35b005c7c1595a5f"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // 🔽 Code pour les commentaires ici
+  const commentForm = document.getElementById("comment-form");
+  const commentList = document.getElementById("comment-list");
+
+  commentForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    const nom = document.getElementById("nom").value;
+    const message = document.getElementById("message").value;
+
+    if (nom && message) {
+      push(ref(db, 'commentaires/tatouage1'), {
+        nom: nom,
+        message: message,
+        date: new Date().toISOString()
+      }).then(() => {
+        commentForm.reset();
+      });
+    }
+  });
+
+  // 🔽 Affichage en direct
+  onValue(ref(db, 'commentaires/tatouage1'), (snapshot) => {
+    commentList.innerHTML = '';
+    snapshot.forEach((child) => {
+      const data = child.val();
+      const div = document.createElement('div');
+      div.innerHTML = `<p><strong>${data.nom} :</strong> ${data.message}</p>`;
+      commentList.appendChild(div);
+    });
+  });
+</script>
+
 </head>
 <body>
-    <header class="header">
-        <div class="header-top">
-            <div class="tattoo-text">Bienvenue sur le blog</div>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="articles.html">Articles</a></li>
-                <li><a href="portfolio.html">Portfolio</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <div id="posts">
-      
+  <header class="header">
+    <div class="header-top">
+      <div class="tattoo-text" id="text-container"></div>
+      <div id="canvas_container_div">
+        <canvas id="canvas" width="1000" height="1000"></canvas> 
+      </div>
     </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+      
+<div class="container">
+  <h1 class="post-title">Tatouage floral en noir et gris</h1>
+  <p class="post-date">Publié le 5 mai 2025</p>
+  
+  <img src="https://via.placeholder.com/800x400?text=Photo+Tatouage" alt="Tatouage floral" class="post-image">
+
+  <div class="post-content">
+      <p>Ce tatouage représente une composition florale délicate réalisée en noir et gris. J'ai voulu travailler les contrastes doux tout en gardant un niveau de détail élevé dans les pétales et les ombrages.</p>
+
+      <p>Ce genre de pièce nécessite plusieurs heures de travail, mais le résultat final en vaut la peine. Chaque élément est réalisé à la main, avec une attention particulière à la symétrie et à la fluidité sur le corps.</p>
+
+      <p>Merci à mon cliente pour sa confiance ! Si vous souhaitez un tatouage dans ce style, n'hésitez pas à me contacter via la page de contact.</p>
+  </div>
+
+  <h3>Laissez un commentaire</h3>
+<form id="comment-form">
+  <input type="text" id="nom" placeholder="Votre nom" required><br><br>
+  <textarea id="message" placeholder="Votre commentaire" required></textarea><br><br>
+  <button type="submit">Envoyer</button>
+</form>
+
+<div id="comment-list">
+  <!-- Les commentaires apparaîtront ici -->
+</div>
+
+</div>
+    <script>
 
         document.addEventListener("DOMContentLoaded", function () {
             const text = "Fleur  de  Pau";
