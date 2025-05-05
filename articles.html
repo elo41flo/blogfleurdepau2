@@ -290,15 +290,30 @@ nav {
 }
 
     </style>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDgEriwJhPs3pU_XuDgsnQE7ptFC2iVksI",
+        authDomain: "blogfleurdepau2.firebaseapp.com",
+        projectId: "blogfleurdepau2",
+        storageBucket: "blogfleurdepau2.firebasestorage.app",
+        messagingSenderId: "223860914702",
+        appId: "1:223860914702:web:9766ab35b005c7c1595a5f"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+    </script>
 </head>
 <body>
     <header class="header">
         <div class="header-top">
             <div class="tattoo-text" id="text-container"></div>
-            <div class="auth-buttons">
-                <button onclick="window.location.href='inscription.html'">Inscription</button>
-                <button onclick="window.location.href='connexion.html'">Connexion</button>
-            </div>
         </div>
         <nav>
             <ul>
@@ -313,8 +328,81 @@ nav {
           <canvas id="canvas" width="1000" height="1000"></canvas> 
         </div>
     </header>
-
+    <form id="commentaire-form">
+      <label for="nom">Nom :</label><br>
+      <input type="text" id="nom" name="nom" required><br><br>
+    
+      <label for="message">Commentaire :</label><br>
+      <textarea id="message" name="message" rows="4" required></textarea><br><br>
+    
+      <button type="submit">Envoyer</button>
+    </form>
+    
+    <div id="commentaires">
+      <!-- Les commentaires seront ajoutés ici -->
+    </div>
+    
     <script>
+      // Ajouter l'événement pour envoyer le commentaire
+      document.getElementById("commentaire-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        envoyerCommentaire(); // Envoie du commentaire
+        afficherCommentaires(); // Rafraîchit l'affichage des commentaires
+      });
+    
+      // Afficher les commentaires dès le chargement de la page
+      afficherCommentaires();
+    </script>
+    
+    <script>
+      // Fonction pour envoyer un commentaire
+function envoyerCommentaire() {
+  const commentaire = document.getElementById("message").value;
+  const nom = document.getElementById("nom").value;
+
+  // Référence dans Firebase Database
+  const db = getDatabase();
+  const commentairesRef = ref(db, 'commentaires/');
+
+  // Pousser un nouveau commentaire dans Firebase
+  push(commentairesRef, {
+    nom: nom,
+    message: commentaire,
+    date: new Date().toISOString()
+  }).then(() => {
+    alert("Commentaire envoyé avec succès !");
+  }).catch((error) => {
+    console.error("Erreur lors de l'envoi du commentaire: ", error);
+  });
+}
+
+// Fonction pour lire et afficher les commentaires
+function afficherCommentaires() {
+  const db = getDatabase();
+  const commentairesRef = ref(db, 'commentaires/');
+
+  // Lire les données
+  get(commentairesRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const commentaires = snapshot.val();
+      const commentairesDiv = document.getElementById("commentaires");
+      commentairesDiv.innerHTML = ""; // Réinitialiser les commentaires existants
+
+      // Ajouter chaque commentaire à la page
+      for (const id in commentaires) {
+        const commentaire = commentaires[id];
+        const commentaireDiv = document.createElement("div");
+        commentaireDiv.innerHTML = `<p><strong>${commentaire.nom}</strong>: ${commentaire.message}</p>`;
+        commentairesDiv.appendChild(commentaireDiv);
+      }
+    } else {
+      console.log("Aucun commentaire trouvé");
+    }
+  }).catch((error) => {
+    console.error("Erreur lors de la récupération des commentaires: ", error);
+  });
+}
+
         document.addEventListener("DOMContentLoaded", function () {
             const text = "Fleur  de  Pau";
             const container = document.getElementById("text-container");

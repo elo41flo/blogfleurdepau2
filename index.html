@@ -310,6 +310,26 @@ p {
 
 
     </style>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { getDatabase, ref, set, push, get, child } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDgEriwJhPs3pU_XuDgsnQE7ptFC2iVksI",
+        authDomain: "blogfleurdepau2.firebaseapp.com",
+        projectId: "blogfleurdepau2",
+        storageBucket: "blogfleurdepau2.firebasestorage.app",
+        messagingSenderId: "223860914702",
+        appId: "1:223860914702:web:9766ab35b005c7c1595a5f"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+    </script>
 </head>
 <body>
     <header class="header">
