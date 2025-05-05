@@ -6,237 +6,236 @@
     <title>Page d'accueil</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Raleway:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-      /* Global */
-body {
-  font-family: 'Raleway', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
-}
+        body {
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
 
-header {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1rem 2rem;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-nav {
-  margin-top: 1rem;
-  width: 100%;
-}
+        nav {
+            margin-top: 1rem;
+            width: 100%;
+        }
 
-nav ul {
-  list-style: none;
-  display: flex;
-  justify-content: flex-end;
-  padding: 0;
-  margin: 0;
-}
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+            padding: 0;
+            margin: 0;
+        }
 
-nav ul li {
-  margin: 0 1rem;
-}
+        nav ul li {
+            margin: 0 1rem;
+        }
 
-nav ul li a {
-  text-decoration: none;
-  color: #555;
-  font-weight: bold;
-  transition: color 0.3s;
-}
+        nav ul li a {
+            text-decoration: none;
+            color: #555;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
 
-nav ul li a:hover {
-  color: #1b5a0e;
-}
+        nav ul li a:hover {
+            color: #1b5a0e;
+        }
 
-/* Pour la mise en page des articles et des commentaires */
-#posts {
-  margin: 2rem;
-}
+        /* Pour la mise en page des articles et des commentaires */
+        #posts {
+            margin: 2rem;
+        }
 
-.post {
-  background-color: white;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 2rem;
-}
+        .post {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
 
-.comments {
-  margin-top: 1rem;
-}
+        .comments {
+            margin-top: 1rem;
+        }
 
-form {
-  margin-top: 1rem;
-}
+        form {
+            margin-top: 1rem;
+        }
 
-input[type="text"], textarea {
-  width: 100%;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
 
-button {
-  padding: 0.5rem 1rem;
-  background-color: #289136;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  border-radius: 5px;
-}
+        button {
+            padding: 0.5rem 1rem;
+            background-color: #289136;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 5px;
+        }
 
-button:hover {
-  background-color: #1b5a0e;
-}
+        button:hover {
+            background-color: #1b5a0e;
+        }
     </style>
     <script type="module">
-      // Importation des fonctions nécessaires depuis Firebase
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-      import { getDatabase, ref, push, get, set } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
-    
-      // Configuration de Firebase
-      const firebaseConfig = {
-        apiKey: "AIzaSyDgEriwJhPs3pU_XuDgsnQE7ptFC2iVksI",
-        authDomain: "blogfleurdepau2.firebaseapp.com",
-        projectId: "blogfleurdepau2",
-        storageBucket: "blogfleurdepau2.firebasestorage.app",
-        messagingSenderId: "223860914702",
-        appId: "1:223860914702:web:9766ab35b005c7c1595a5f"
-      };
-    
-      // Initialisation de Firebase
-      const app = initializeApp(firebaseConfig);
-      const db = getDatabase();
-
-      // Fonction pour ajouter un post dans Firebase
-      function ajouterPost() {
-        const titre = document.getElementById("titre").value;
-        const contenu = document.getElementById("contenu").value;
-
-        const postsRef = ref(db, 'posts/');
+        // Importation des fonctions nécessaires depuis Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getDatabase, ref, push, get, set } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
         
-        // Ajouter un nouveau post dans Firebase
-        push(postsRef, {
-          titre: titre,
-          contenu: contenu,
-          date: new Date().toISOString()
-        }).then(() => {
-          alert("Post ajouté avec succès !");
-          chargerPosts(); // Rafraîchir la liste des posts après l'ajout
-        }).catch((error) => {
-          console.error("Erreur lors de l'ajout du post: ", error);
+        // Configuration de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDgEriwJhPs3pU_XuDgsnQE7ptFC2iVksI",
+            authDomain: "blogfleurdepau2.firebaseapp.com",
+            projectId: "blogfleurdepau2",
+            storageBucket: "blogfleurdepau2.firebasestorage.app",
+            messagingSenderId: "223860914702",
+            appId: "1:223860914702:web:9766ab35b005c7c1595a5f"
+        };
+        
+        // Initialisation de Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+
+        // Fonction pour ajouter un post dans Firebase
+        function ajouterPost() {
+            const titre = document.getElementById("titre").value;
+            const contenu = document.getElementById("contenu").value;
+
+            const postsRef = ref(db, 'posts/');
+            
+            // Ajouter un nouveau post dans Firebase
+            push(postsRef, {
+                titre: titre,
+                contenu: contenu,
+                date: new Date().toISOString()
+            }).then(() => {
+                alert("Post ajouté avec succès !");
+                chargerPosts(); // Rafraîchir la liste des posts après l'ajout
+            }).catch((error) => {
+                console.error("Erreur lors de l'ajout du post: ", error);
+            });
+        }
+
+        // Fonction pour envoyer un commentaire sous un post
+        function envoyerCommentaire(postId) {
+            const commentaire = document.getElementById(`message-${postId}`).value;
+            const nom = document.getElementById(`nom-${postId}`).value;
+
+            const commentairesRef = ref(db, `posts/${postId}/comments/`);
+
+            // Pousser un nouveau commentaire dans Firebase
+            push(commentairesRef, {
+                nom: nom,
+                message: commentaire,
+                date: new Date().toISOString()
+            }).then(() => {
+                alert("Commentaire envoyé avec succès !");
+                afficherCommentaires(postId); // Rafraîchir les commentaires de ce post
+            }).catch((error) => {
+                console.error("Erreur lors de l'envoi du commentaire: ", error);
+            });
+        }
+
+        // Fonction pour afficher les commentaires d'un post
+        function afficherCommentaires(postId) {
+            const commentairesRef = ref(db, `posts/${postId}/comments/`);
+
+            // Lire les commentaires de Firebase
+            get(commentairesRef).then((snapshot) => {
+                const commentairesDiv = document.getElementById(`comments-${postId}`);
+                commentairesDiv.innerHTML = ""; // Réinitialiser les commentaires existants
+
+                if (snapshot.exists()) {
+                    const commentaires = snapshot.val();
+
+                    // Ajouter chaque commentaire à la page
+                    for (const id in commentaires) {
+                        const commentaire = commentaires[id];
+                        const commentaireDiv = document.createElement("div");
+                        commentaireDiv.innerHTML = `<p><strong>${commentaire.nom}</strong>: ${commentaire.message}</p>`;
+                        commentairesDiv.appendChild(commentaireDiv);
+                    }
+                } else {
+                    console.log("Aucun commentaire trouvé");
+                }
+            }).catch((error) => {
+                console.error("Erreur lors de la récupération des commentaires: ", error);
+            });
+        }
+
+        // Fonction pour charger tous les posts depuis Firebase
+        function chargerPosts() {
+            const postsRef = ref(db, 'posts/');
+            get(postsRef).then((snapshot) => {
+                const postsDiv = document.getElementById("posts");
+                postsDiv.innerHTML = ""; // Réinitialiser les posts existants
+
+                if (snapshot.exists()) {
+                    const posts = snapshot.val();
+
+                    // Ajouter chaque post à la page
+                    for (const postId in posts) {
+                        const post = posts[postId];
+                        const postDiv = document.createElement("div");
+                        postDiv.classList.add("post");
+                        postDiv.id = postId;
+
+                        postDiv.innerHTML = `
+                            <h2>${post.titre}</h2>
+                            <p>${post.contenu}</p>
+                            <div class="comments" id="comments-${postId}">
+                                <!-- Les commentaires de ce post seront affichés ici -->
+                            </div>
+                            <form id="comment-form-${postId}">
+                                <label for="nom-${postId}">Nom :</label><br>
+                                <input type="text" id="nom-${postId}" name="nom" required><br><br>
+                                
+                                <label for="message-${postId}">Commentaire :</label><br>
+                                <textarea id="message-${postId}" name="message" rows="4" required></textarea><br><br>
+                        
+                                <button type="submit">Envoyer</button>
+                            </form>
+                        `;
+
+                        // Ajouter l'événement pour envoyer le commentaire
+                        document.getElementById(`comment-form-${postId}`).addEventListener("submit", function(event) {
+                            event.preventDefault();
+                            envoyerCommentaire(postId); // Envoie du commentaire pour ce post
+                        });
+
+                        postsDiv.appendChild(postDiv);
+                        afficherCommentaires(postId); // Afficher les commentaires pour ce post
+                    }
+                } else {
+                    console.log("Aucun post trouvé");
+                }
+            }).catch((error) => {
+                console.error("Erreur lors de la récupération des posts: ", error);
+            });
+        }
+
+        // Charger les posts au démarrage de la page
+        document.addEventListener("DOMContentLoaded", function() {
+            chargerPosts();
         });
-      }
-
-      // Fonction pour envoyer un commentaire sous un post
-      function envoyerCommentaire(postId) {
-        const commentaire = document.getElementById(`message-${postId}`).value;
-        const nom = document.getElementById(`nom-${postId}`).value;
-
-        const commentairesRef = ref(db, `posts/${postId}/comments/`);
-
-        // Pousser un nouveau commentaire dans Firebase
-        push(commentairesRef, {
-          nom: nom,
-          message: commentaire,
-          date: new Date().toISOString()
-        }).then(() => {
-          alert("Commentaire envoyé avec succès !");
-          afficherCommentaires(postId); // Rafraîchir les commentaires de ce post
-        }).catch((error) => {
-          console.error("Erreur lors de l'envoi du commentaire: ", error);
-        });
-      }
-
-      // Fonction pour afficher les commentaires d'un post
-      function afficherCommentaires(postId) {
-        const commentairesRef = ref(db, `posts/${postId}/comments/`);
-
-        // Lire les commentaires de Firebase
-        get(commentairesRef).then((snapshot) => {
-          const commentairesDiv = document.getElementById(`comments-${postId}`);
-          commentairesDiv.innerHTML = ""; // Réinitialiser les commentaires existants
-
-          if (snapshot.exists()) {
-            const commentaires = snapshot.val();
-
-            // Ajouter chaque commentaire à la page
-            for (const id in commentaires) {
-              const commentaire = commentaires[id];
-              const commentaireDiv = document.createElement("div");
-              commentaireDiv.innerHTML = `<p><strong>${commentaire.nom}</strong>: ${commentaire.message}</p>`;
-              commentairesDiv.appendChild(commentaireDiv);
-            }
-          } else {
-            console.log("Aucun commentaire trouvé");
-          }
-        }).catch((error) => {
-          console.error("Erreur lors de la récupération des commentaires: ", error);
-        });
-      }
-
-      // Fonction pour charger tous les posts depuis Firebase
-      function chargerPosts() {
-        const postsRef = ref(db, 'posts/');
-        get(postsRef).then((snapshot) => {
-          const postsDiv = document.getElementById("posts");
-          postsDiv.innerHTML = ""; // Réinitialiser les posts existants
-
-          if (snapshot.exists()) {
-            const posts = snapshot.val();
-
-            // Ajouter chaque post à la page
-            for (const postId in posts) {
-              const post = posts[postId];
-              const postDiv = document.createElement("div");
-              postDiv.classList.add("post");
-              postDiv.id = postId;
-
-              postDiv.innerHTML = `
-                <h2>${post.titre}</h2>
-                <p>${post.contenu}</p>
-                <div class="comments" id="comments-${postId}">
-                  <!-- Les commentaires de ce post seront affichés ici -->
-                </div>
-                <form id="comment-form-${postId}">
-                  <label for="nom-${postId}">Nom :</label><br>
-                  <input type="text" id="nom-${postId}" name="nom" required><br><br>
-                  
-                  <label for="message-${postId}">Commentaire :</label><br>
-                  <textarea id="message-${postId}" name="message" rows="4" required></textarea><br><br>
-          
-                  <button type="submit">Envoyer</button>
-                </form>
-              `;
-
-              // Ajouter l'événement pour envoyer le commentaire
-              document.getElementById(`comment-form-${postId}`).addEventListener("submit", function(event) {
-                event.preventDefault();
-                envoyerCommentaire(postId); // Envoie du commentaire pour ce post
-              });
-
-              postsDiv.appendChild(postDiv);
-              afficherCommentaires(postId); // Afficher les commentaires pour ce post
-            }
-          } else {
-            console.log("Aucun post trouvé");
-          }
-        }).catch((error) => {
-          console.error("Erreur lors de la récupération des posts: ", error);
-        });
-      }
-
-      // Charger les posts au démarrage de la page
-      document.addEventListener("DOMContentLoaded", function() {
-        chargerPosts();
-      });
     </script>
 </head>
 <body>
