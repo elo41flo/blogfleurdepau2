@@ -26,13 +26,6 @@ header {
   align-items: center;
 }
 
-.header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
 nav {
   margin-top: 1rem;
   width: 100%;
@@ -106,7 +99,7 @@ button:hover {
     <script type="module">
       // Importation des fonctions nécessaires depuis Firebase
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-      import { getDatabase, ref, push, get } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+      import { getDatabase, ref, push, get, set } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
     
       // Configuration de Firebase
       const firebaseConfig = {
@@ -122,12 +115,31 @@ button:hover {
       const app = initializeApp(firebaseConfig);
       const db = getDatabase();
 
+      // Fonction pour ajouter un post dans Firebase
+      function ajouterPost() {
+        const titre = document.getElementById("titre").value;
+        const contenu = document.getElementById("contenu").value;
+
+        const postsRef = ref(db, 'posts/');
+        
+        // Ajouter un nouveau post dans Firebase
+        push(postsRef, {
+          titre: titre,
+          contenu: contenu,
+          date: new Date().toISOString()
+        }).then(() => {
+          alert("Post ajouté avec succès !");
+          chargerPosts(); // Rafraîchir la liste des posts après l'ajout
+        }).catch((error) => {
+          console.error("Erreur lors de l'ajout du post: ", error);
+        });
+      }
+
       // Fonction pour envoyer un commentaire sous un post
       function envoyerCommentaire(postId) {
         const commentaire = document.getElementById(`message-${postId}`).value;
         const nom = document.getElementById(`nom-${postId}`).value;
 
-        // Référence dans Firebase Database pour le post spécifique
         const commentairesRef = ref(db, `posts/${postId}/comments/`);
 
         // Pousser un nouveau commentaire dans Firebase
@@ -137,7 +149,7 @@ button:hover {
           date: new Date().toISOString()
         }).then(() => {
           alert("Commentaire envoyé avec succès !");
-          afficherCommentaires(postId); // Rafraîchit les commentaires de ce post
+          afficherCommentaires(postId); // Rafraîchir les commentaires de ce post
         }).catch((error) => {
           console.error("Erreur lors de l'envoi du commentaire: ", error);
         });
@@ -170,17 +182,60 @@ button:hover {
         });
       }
 
-      // Initialisation des événements de soumission des formulaires au chargement de la page
-      document.addEventListener("DOMContentLoaded", function() {
-        const postIds = ["postId1", "postId2"]; // Liste des IDs de tes posts
-        postIds.forEach(postId => {
-          document.getElementById(`comment-form-${postId}`).addEventListener("submit", function(event) {
-            event.preventDefault();
-            envoyerCommentaire(postId); // Envoie du commentaire pour ce post
-          });
+      // Fonction pour charger tous les posts depuis Firebase
+      function chargerPosts() {
+        const postsRef = ref(db, 'posts/');
+        get(postsRef).then((snapshot) => {
+          const postsDiv = document.getElementById("posts");
+          postsDiv.innerHTML = ""; // Réinitialiser les posts existants
 
-          afficherCommentaires(postId); // Affiche les commentaires pour ce post
+          if (snapshot.exists()) {
+            const posts = snapshot.val();
+
+            // Ajouter chaque post à la page
+            for (const postId in posts) {
+              const post = posts[postId];
+              const postDiv = document.createElement("div");
+              postDiv.classList.add("post");
+              postDiv.id = postId;
+
+              postDiv.innerHTML = `
+                <h2>${post.titre}</h2>
+                <p>${post.contenu}</p>
+                <div class="comments" id="comments-${postId}">
+                  <!-- Les commentaires de ce post seront affichés ici -->
+                </div>
+                <form id="comment-form-${postId}">
+                  <label for="nom-${postId}">Nom :</label><br>
+                  <input type="text" id="nom-${postId}" name="nom" required><br><br>
+                  
+                  <label for="message-${postId}">Commentaire :</label><br>
+                  <textarea id="message-${postId}" name="message" rows="4" required></textarea><br><br>
+          
+                  <button type="submit">Envoyer</button>
+                </form>
+              `;
+
+              // Ajouter l'événement pour envoyer le commentaire
+              document.getElementById(`comment-form-${postId}`).addEventListener("submit", function(event) {
+                event.preventDefault();
+                envoyerCommentaire(postId); // Envoie du commentaire pour ce post
+              });
+
+              postsDiv.appendChild(postDiv);
+              afficherCommentaires(postId); // Afficher les commentaires pour ce post
+            }
+          } else {
+            console.log("Aucun post trouvé");
+          }
+        }).catch((error) => {
+          console.error("Erreur lors de la récupération des posts: ", error);
         });
+      }
+
+      // Charger les posts au démarrage de la page
+      document.addEventListener("DOMContentLoaded", function() {
+        chargerPosts();
       });
     </script>
 </head>
@@ -200,48 +255,21 @@ button:hover {
     </header>
 
     <div id="posts">
-        <!-- Premier Post -->
-        <div class="post" id="postId1">
-            <h2>Titre du premier post</h2>
-            <p>Contenu du premier post...</p>
-    
-            <div class="comments" id="comments-postId1">
-                <!-- Les commentaires de ce post seront affichés ici -->
-            </div>
-    
-            <!-- Formulaire pour ajouter un commentaire sous ce post -->
-            <form id="comment-form-postId1">
-                <label for="nom-postId1">Nom :</label><br>
-                <input type="text" id="nom-postId1" name="nom" required><br><br>
-                
-                <label for="message-postId1">Commentaire :</label><br>
-                <textarea id="message-postId1" name="message" rows="4" required></textarea><br><br>
-        
-                <button type="submit">Envoyer</button>
-            </form>
-        </div>
+        <!-- Les posts seront chargés dynamiquement ici -->
+    </div>
 
-        <!-- Deuxième Post (ajoute autant de posts que tu veux) -->
-        <div class="post" id="postId2">
-            <h2>Titre du deuxième post</h2>
-            <p>Contenu du deuxième post...</p>
-    
-            <div class="comments" id="comments-postId2">
-                <!-- Les commentaires de ce post seront affichés ici -->
-            </div>
-    
-            <!-- Formulaire pour ajouter un commentaire sous ce post -->
-            <form id="comment-form-postId2">
-                <label for="nom-postId2">Nom :</label><br>
-                <input type="text" id="nom-postId2" name="nom" required><br><br>
-                
-                <label for="message-postId2">Commentaire :</label><br>
-                <textarea id="message-postId2" name="message" rows="4" required></textarea><br><br>
-        
-                <button type="submit">Envoyer</button>
-            </form>
-        </div>
-
+    <!-- Formulaire pour ajouter un nouveau post -->
+    <div>
+        <h2>Ajouter un nouveau post</h2>
+        <form onsubmit="ajouterPost(); return false;">
+            <label for="titre">Titre :</label><br>
+            <input type="text" id="titre" required><br><br>
+            
+            <label for="contenu">Contenu :</label><br>
+            <textarea id="contenu" required></textarea><br><br>
+            
+            <button type="submit">Ajouter le post</button>
+        </form>
     </div>
     <script>
 
