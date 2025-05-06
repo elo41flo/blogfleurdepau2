@@ -190,6 +190,64 @@ nav {
   z-index: -1; /* Empêche l'animation de chevaucher les autres éléments */
 }
 
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  object-fit: cover;
+}
+
+.gallery img:hover {
+  transform: scale(1.03);
+}
+
+ /* Lightbox styles */
+ .lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s ease;
+  z-index: 9999;
+}
+
+.lightbox img {
+  max-width: 100vw;
+  max-height: 100vh;
+  border-radius: 10px;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+.lightbox.show img {
+  transform: scale(1.1); /* zoom doux quand la lightbox s'ouvre */
+}
+
+.lightbox.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.lightbox:active {
+  visibility: hidden;
+  opacity: 0;
+}
+
 @keyframes plantAnimation {
   0% {
       top: 0;
@@ -309,7 +367,68 @@ nav {
           <canvas id="canvas" width="1000" height="1000"></canvas> 
         </div>
     </header>
-    
+    <div class="gallery">
+      <img src="images/tattoo1.jpg" alt="Tatouage 1">
+      <img src="images/tattoo2.jpg" alt="Tatouage 2">
+      <img src="images/tattoo3.jpg" alt="Tatouage 3">
+      <img src="images/tattoo4.jpg" alt="Tatouage 4">
+      <img src="images/tattoo5.jpg" alt="Tatouage 5">
+      <img src="images/tattoo6.jpg" alt="Tatouage 6">
+      <img src="images/tattoo7.jpg" alt="Tatouage 7">
+      <img src="images/tattoo8.jpg" alt="Taoutage 8">
+      <img src="images/tattoo9.jpg" alt="Tatouage 9">
+      <img src="images/tattoo10.jpg" alt="Tatouage 10">
+      <img src="images/tattoo11.jpg" alt="Taoutage 11">
+      <img src="images/tattoo12.jpg" alt="Tatouage 12">
+      <img src="images/tattoo13.jpg" alt="Tatouage 13">
+      <img src="images/tattoo14.jpg" alt="Taoutage 14">
+      <img src="images/tattoo15.jpg" alt="Tatouage 15">
+      <img src="images/tattoo16.jpg" alt="Tatouage 16">
+      <img src="images/tattoo17.jpg" alt="Tatouage 17">
+      <img src="images/tattoo18.jpg" alt="Tatouage 18">
+      <img src="images/tattoo19.jpg" alt="Tatouage 19">
+      <img src="images/tattoo20.jpg" alt="Tatouage 20">
+      <img src="images/tattoo21.jpg" alt="Tatouage 21">
+      <img src="images/tattoo22.jpg" alt="Tatouage 22">
+      <img src="images/tattoo23.jpg" alt="Tatouage 23">
+      <img src="images/tattoo24.jpg" alt="Tatouage 24">
+      <img src="images/tattoo25.jpg" alt="Tatouage 25">
+      <img src="images/tattoo26.jpg" alt="Tatouage 26">
+      <img src="images/tattoo27.jpg" alt="Tatouage 27">
+      <img src="images/tattoo28.jpg" alt="Tatouage 28">
+      <img src="images/tattoo29.jpg" alt="Tatouage 29">
+      <img src="images/tattoo30.jpg" alt="Tatouage 30">
+      <img src="images/tattoo31.jpg" alt="Tatouage 31">
+      <img src="images/tattoo32.jpg" alt="Tatouage 32">
+      <img src="images/tattoo33.jpg" alt="Tatouage 33">
+      <img src="images/tattoo34.jpg" alt="Tatouage 34">
+      <img src="images/tattoo35.jpg" alt="Tatouage 35">
+      <img src="images/tattoo36.jpg" alt="Tatouage 36">
+      <!-- Ajoute autant d'images que nécessaire -->
+    </div>
+  
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+      <img id="lightbox-img" src="" alt="agrandissement">
+    </div>
+  
+
+    <script>
+      const images = document.querySelectorAll('.gallery img');
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+  
+      images.forEach(img => {
+        img.addEventListener('click', () => {
+          lightboxImg.src = img.src;
+          lightbox.classList.add('show');
+        });
+      });
+  
+      lightbox.addEventListener('click', () => {
+        lightbox.classList.remove('show');
+      });
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const text = "Fleur  de  Pau";
